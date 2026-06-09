@@ -1,12 +1,31 @@
-import {getSetDifficulty, isValidSet} from "./CardStack";
+import { getSetDifficulty, isValidSet } from "./CardStack";
+import type { CardData } from "./entity/Card";
 
 export const DIFFICULTY_SCORE_MULTIPLIER = 10;
 const TIME_LOSS_PER_FAILURE = 5;
 const LIVES = 5;
 const POINT_LOSS_ON_MISSING_LIVES = 20;
 
+export interface SelectedCard {
+    id: number;
+    data: CardData;
+}
+
+type TimeChangeListener = (state: GameState) => void;
+
 export class GameState {
-    constructor({scene, time}) {
+    initialTime: number;
+    time: number;
+    lives: number;
+    clickedCards: Map<number, CardData>;
+    newDeck: boolean;
+    score: number;
+    lastSelectionSuccess: boolean | null;
+    onTimeChangeCallbacks: (TimeChangeListener | null)[];
+    selectedSets: SelectedCard[][];
+    timerHandle?: ReturnType<typeof setInterval>;
+
+    constructor({ time }: { time: number }) {
         this.initialTime = time;
         this.time = time;
         this.lives = LIVES;
@@ -18,7 +37,7 @@ export class GameState {
         this.selectedSets = []
     }
 
-    onTimeChange (callBack) {
+    onTimeChange (callBack: TimeChangeListener | null) {
         this.onTimeChangeCallbacks.push(callBack)
     }
 
@@ -48,9 +67,9 @@ export class GameState {
         }
     }
 
-    getSelectedCards() {
+    getSelectedCards(): SelectedCard[] {
         return Array.from(this.clickedCards).map(([id, card]) => {
-            return {id: id, data: card};
+            return { id: id, data: card };
         });
     }
 
@@ -71,7 +90,7 @@ export class GameState {
         }
     }
 
-    toggleCard({id, data}) {
+    toggleCard({ id, data }: SelectedCard) {
         if (this.clickedCards.has(id)) {
             this.clickedCards.delete(id);
         } else {
@@ -79,13 +98,13 @@ export class GameState {
 
             if (this.clickedCards.size === 3) {
 
-                let cards = Array.from(this.clickedCards).map(([_, data]) => {
+                let cards = Array.from(this.clickedCards).map(([, data]) => {
                    return data;
                 });
 
-                if (isValidSet(...cards)) {
+                if (isValidSet(cards[0], cards[1], cards[2])) {
                     this.lastSelectionSuccess = true;
-                    this.score += getSetDifficulty(...cards) * DIFFICULTY_SCORE_MULTIPLIER;
+                    this.score += getSetDifficulty(cards[0], cards[1], cards[2]) * DIFFICULTY_SCORE_MULTIPLIER;
                     this.newDeck = true;
                     const selectedSet = [...this.getSelectedCards()]
                     this.selectedSets.push(selectedSet)

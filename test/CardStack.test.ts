@@ -1,10 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { CardStack, isValidSet, getSetDifficulty } from "../src/util/CardStack";
+import type { CardData } from "../src/util/entity/Card";
 
-const card = (element, count, color, level = 1) => ({ element, count, color, level });
+const card = (element: number, count: number, color: number, level = 1): CardData => ({ element, count, color, level });
 
 // Brute-force: does the deck contain at least one valid 3-card set?
-const containsValidSet = (deck) => {
+const containsValidSet = (deck: CardData[]): boolean => {
   for (let a = 0; a < deck.length; a++) {
     for (let b = a + 1; b < deck.length; b++) {
       for (let c = b + 1; c < deck.length; c++) {

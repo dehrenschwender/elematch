@@ -3,7 +3,7 @@ import background from '../assets/images/background-with-area.png'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 
 export class Background extends BaseScene {
-  constructor (props) {
+  constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'Background',
       ...props

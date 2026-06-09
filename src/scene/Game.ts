@@ -11,6 +11,8 @@ import { LastMatch } from './LastMatch'
 import { Background } from './Background'
 
 export class Game extends BaseScene {
+    cardstack: CardStack;
+
     constructor() {
         super({
             key: 'Game',
@@ -51,15 +53,16 @@ export class Game extends BaseScene {
     }
 
     subscribeToTimeChange () {
-        this.data.get('gameState').onTimeChange((gameState) => {
-            if (gameState.isGameOver()) {
+        const gameState = this.data.get('gameState') as GameState
+        gameState.onTimeChange((state) => {
+            if (state.isGameOver()) {
                 this.endGame()
             }
         })
     }
 
     removeAllListeners () {
-        let gameState = this.data.get('gameState')
+        const gameState = this.data.get('gameState') as GameState
         gameState.stopTimer()
         gameState.removeAllListeners()
         this.data.events.removeAllListeners()
@@ -71,7 +74,7 @@ export class Game extends BaseScene {
         this.scene.remove('CardGrid')
         this.scene.remove('LastMatch')
         this.scene.remove('Background')
-        let gameState = this.data.get('gameState')
+        const gameState = this.data.get('gameState') as GameState
         this.scene.start('GameOver', { finalScore: gameState.score })
     }
 }

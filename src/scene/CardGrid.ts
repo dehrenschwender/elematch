@@ -2,6 +2,7 @@ import { BaseScene } from './BaseScene'
 import { CardStack } from '../util/CardStack'
 import { CardImage } from '../util/entity/CardImage'
 import { getTextureNameForCard } from '../util/entity/Card'
+import type { GameState } from '../util/GameState'
 
 import select1Sound from '../assets/sounds/select-1.wav'
 import select2Sound from '../assets/sounds/select-2.wav'
@@ -9,6 +10,8 @@ import select3Sound from '../assets/sounds/select-3.wav'
 import selectFailSound from  '../assets/sounds/select-fail.wav'
 
 export class CardGrid extends BaseScene {
+  cardstack: CardStack;
+
   constructor () {
     super({
       key: 'CardGrid',
@@ -22,7 +25,7 @@ export class CardGrid extends BaseScene {
     let deck = this.cardstack.getDeck();
 
     //card 130 x 170
-    let pos = [
+    let pos: [number, number][] = [
       [400, 130],
       [540, 130],
       [680, 130],
@@ -52,7 +55,7 @@ export class CardGrid extends BaseScene {
 
     let i = 0;
 
-    this.children.each((child) => {
+    this.children.each((child: Phaser.GameObjects.GameObject) => {
       // Phaser removed TweenManager.createTimeline() in 3.60; tweens.chain() runs a
       // sequence of tweens and auto-plays (the old timeline needed an explicit play()).
       this.tweens.chain({
@@ -79,15 +82,17 @@ export class CardGrid extends BaseScene {
   }
 
   subscribeToStateChange () {
-    this.scene.get('Game').events.on('changedata', (gameState) => {
+    this.scene.get('Game').events.on('changedata', (gameState: GameState) => {
       this.children.getAll().forEach((child) => {
         if (child.active) {
-          child.setSelected(false)
+          const cardImage = child as CardImage
+          cardImage.setSelected(false)
         }
       })
 
       gameState.getSelectedCards().forEach((card) => {
-        this.children.getAt(card.id).setSelected(true);
+        const cardImage = this.children.getAt(card.id) as CardImage
+        cardImage.setSelected(true);
         if (gameState.getSelectedCards().length === 2) {
           let music2 = this.sound.add('select2Sound');
           music2.play()
@@ -99,7 +104,8 @@ export class CardGrid extends BaseScene {
         if (gameState.lastSelectionSuccess === false && gameState.getSelectedCards().length === 3) {
           let musicFail = this.sound.add('selectFailSound');
           musicFail.play()
-          this.children.getAt(card.id).noMatchAnimation()
+          const failedCard = this.children.getAt(card.id) as CardImage
+          failedCard.noMatchAnimation()
         }
       });
 
@@ -107,7 +113,8 @@ export class CardGrid extends BaseScene {
         gameState.resetSelectedCards()
         this.children.getAll().forEach((child) => {
           if (child.active) {
-            child.setSelected(false)
+            const cardImage = child as CardImage
+            cardImage.setSelected(false)
           }
         })
       }

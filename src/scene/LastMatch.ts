@@ -1,7 +1,8 @@
 import { BaseScene } from './BaseScene'
-import { getTextureNameForCardObjectLiteral } from '../util/entity/Card'
+import { getTextureNameForCardObjectLiteral, type CardData } from '../util/entity/Card'
 import { getSetDifficulty } from '../util/CardStack'
 import { DIFFICULTY_SCORE_MULTIPLIER } from '../util/GameState'
+import type { GameState, SelectedCard } from '../util/GameState'
 import { TEXT_Y } from './ScoreOverlay'
 
 const X_VALUES = [130, 310, 490]
@@ -10,7 +11,9 @@ const FONT_SIZE = 64
 const TEXT_COLOR = '#FFFFFF'
 
 export class LastMatch extends BaseScene {
-  constructor (props) {
+  lastSetLength: number;
+
+  constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'LastMatch',
       ...props
@@ -26,7 +29,7 @@ export class LastMatch extends BaseScene {
     this.scene.get('Game').events.on('changedata', this.onGameStateChange.bind(this))
   }
 
-  onGameStateChange (gameState) {
+  onGameStateChange (gameState: GameState) {
     const sets = Array.from(gameState.selectedSets)
     if (sets.length !== this.lastSetLength) {
       this.lastSetLength = sets.length
@@ -34,17 +37,17 @@ export class LastMatch extends BaseScene {
     }
   }
 
-  recreateGameObjects (set) {
-    if (set.length !== 3) {
+  recreateGameObjects (set?: SelectedCard[]) {
+    if (!set || set.length !== 3) {
       return
     }
-    const cardsData = set.map(set => set.data)
+    const cardsData = set.map(entry => entry.data)
     this.children.removeAll()
     this.createCards(cardsData)
     this.createScoreText(cardsData)
   }
 
-  createCards (cardsData) {
+  createCards (cardsData: CardData[]) {
     cardsData = [...cardsData].sort(((data1, data2) => data1.count - data2.count))
     const cardImageNames = cardsData.map((data) => getTextureNameForCardObjectLiteral(data))
 
@@ -59,8 +62,8 @@ export class LastMatch extends BaseScene {
     })
   }
 
-  createScoreText (cardsData) {
-    const score = getSetDifficulty(...cardsData) * DIFFICULTY_SCORE_MULTIPLIER
+  createScoreText (cardsData: CardData[]) {
+    const score = getSetDifficulty(cardsData[0], cardsData[1], cardsData[2]) * DIFFICULTY_SCORE_MULTIPLIER
     const textWidth = 250
     console.log(`score is ${score}`)
     const text = new Phaser.GameObjects.Text(

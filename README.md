@@ -13,6 +13,7 @@ Get points by finding card sets.
 
 ## Tooling
 
+- [TypeScript](https://www.typescriptlang.org/) for the game source and tests.
 - [Vite](https://vite.dev/) for bundling and the dev server.
 - [Phaser 3](https://phaser.io/) game framework.
 - [pnpm](https://pnpm.io/) as the package manager (enable with `corepack enable`).
@@ -36,6 +37,10 @@ pnpm dev
 Build the project (output in `dist/`)
 ```bash
 pnpm build
+```
+`pnpm build` type-checks with `tsc --noEmit` before bundling. To type-check on its own:
+```bash
+pnpm typecheck
 ```
 
 Run the tests

@@ -1,7 +1,24 @@
-import { getTextureNameForCard } from './Card'
+import { getTextureNameForCard, type CardData } from './Card'
+
+interface CardImageConfig {
+  scene: Phaser.Scene;
+  x: number;
+  y: number;
+  image: string;
+  id: number;
+  element: number;
+  count: number;
+  color: number;
+  level: number;
+}
 
 export class CardImage extends Phaser.GameObjects.Image {
-  constructor ({ scene, x, y, image, id, element, count, color, level }) {
+  element: number;
+  count: number;
+  color: number;
+  level: number;
+
+  constructor ({ scene, x, y, image, id, element, count, color, level }: CardImageConfig) {
     super(scene, x, y, image);
     this.element = element;
     this.count = count;
@@ -21,13 +38,13 @@ export class CardImage extends Phaser.GameObjects.Image {
     });
   }
 
-  onClickDown(card) {
+  onClickDown(card: { id: number; data: CardData }) {
     const gameScene = this.scene.scene.get("Game")
     gameScene.data.get("gameState").toggleCard(card);
     gameScene.events.emit("changedata", gameScene.data.get("gameState"));
   }
 
-  setSelected(state) {
+  setSelected(state: boolean) {
     if (state) {
       this.setTexture(getTextureNameForCard(this, "full"))
     } else {

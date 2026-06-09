@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { GameState, DIFFICULTY_SCORE_MULTIPLIER } from "../src/util/GameState";
+import type { CardData } from "../src/util/entity/Card";
 
-const card = (element, count, color, level = 1) => ({ element, count, color, level });
+const card = (element: number, count: number, color: number, level = 1): CardData => ({ element, count, color, level });
 
 // A valid set with one all-different property (color) -> difficulty 1.
 const validTriple = [card(1, 1, 1), card(1, 1, 2), card(1, 1, 3)];
@@ -10,7 +11,7 @@ const validTripleHard = [card(1, 1, 1), card(2, 2, 2), card(3, 3, 3)];
 // Not a set: color is 1,2,1 (two-equal-one-different).
 const invalidTriple = [card(1, 1, 1), card(1, 1, 2), card(1, 1, 1)];
 
-const selectTriple = (state, triple) => {
+const selectTriple = (state: GameState, triple: CardData[]) => {
   triple.forEach((data, id) => state.toggleCard({ id, data }));
 };
 

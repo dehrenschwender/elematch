@@ -8,7 +8,7 @@ import buttonTutorialActive from '../assets/images/buttons/button-tutorial-activ
 import startBackground from '../assets/images/start.png'
 
 export class Menu extends BaseScene {
-  constructor (config) {
+  constructor (config?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'Menu',
       ...config

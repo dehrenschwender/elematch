@@ -6,7 +6,7 @@ export class StartScene extends BaseScene {
     super({
       key: 'StartScene',
       showTimer: false,
-    });
+    } as Phaser.Types.Scenes.SettingsConfig);
     console.log('test')
   }
 
@@ -22,11 +22,11 @@ export class StartScene extends BaseScene {
       logo.setScale(1.1, 1.1)
     });
 
-    this.input.on('pointerdown', (e) => {
+    this.input.on('pointerdown', (e: Phaser.Input.Pointer) => {
       console.log('clicked', e)
     })
 
-    const helloButton = this.add.text(100, 100, 'Hello Phaser!', { fill: '#0f0' });
+    const helloButton = this.add.text(100, 100, 'Hello Phaser!', { color: '#0f0' });
     helloButton.setInteractive();
 
     helloButton.on('pointerdown', () => { console.log('pointerdown'); });
