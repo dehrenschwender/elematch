@@ -12,3 +12,8 @@ node_modules/
 # Build
 dist/
 /npm-debug.log
+/pnpm-debug.log*
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars

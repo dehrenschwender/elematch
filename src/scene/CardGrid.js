@@ -53,27 +53,20 @@ export class CardGrid extends BaseScene {
     let i = 0;
 
     this.children.each((child) => {
-      let timeline = this.tweens.createTimeline()
-
-      timeline.add({
+      // Phaser removed TweenManager.createTimeline() in 3.60; tweens.chain() runs a
+      // sequence of tweens and auto-plays (the old timeline needed an explicit play()).
+      this.tweens.chain({
         targets: child,
-        alpha: 0,
-        duration: 100,
-        ease: 'Power2',
+        tweens: [
+          { alpha: 0, duration: 100, ease: 'Power2' },
+          { ease: 'Sine.easeIn', alpha: 100, delay: i * 20 },
+        ],
       })
-      timeline.add({
-        targets: child,
-        ease: 'Sine.easeIn',
-        alpha: 100,
-        delay: i * 20,
-      });
 
       i++;
       if (i % 12 === 0) {
         i = 0;
       }
-
-      timeline.play()
     })
 
     const gameState = this.scene.get('Game').data.get('gameState')
