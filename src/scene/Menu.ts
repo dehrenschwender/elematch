@@ -26,6 +26,36 @@ export class Menu extends BaseScene {
     this.createInvisibleFontLoaderText()
     this.addStartButton()
     this.addTutorialButton()
+    this.addSettingsButton()
+  }
+
+  addSettingsButton () {
+    // Self-contained cog badge in the top-right corner that opens the Settings overlay.
+    const badge = this.add.circle(0, 0, 34, 0x0b2740, 1).setStrokeStyle(2, 0x3a6ea5)
+
+    const gear = this.add.graphics()
+    gear.fillStyle(0xffffff, 1)
+    const teeth = 8
+    for (let i = 0; i < teeth; i++) {
+      gear.save()
+      gear.rotateCanvas((i / teeth) * Math.PI * 2)
+      gear.fillRect(-5, -27, 10, 13)
+      gear.restore()
+    }
+    gear.fillCircle(0, 0, 18)
+    gear.fillStyle(0x0b2740, 1)
+    gear.fillCircle(0, 0, 7)
+
+    const cog = this.add.container(SCREEN_WIDTH - 72, 70, [badge, gear])
+
+    badge.setInteractive({ useHandCursor: true })
+    badge.on('pointerup', () => {
+      if (!this.scene.isActive('Settings')) {
+        this.scene.launch('Settings')
+      }
+    })
+    badge.on('pointerover', () => this.tweens.add({ targets: cog, scale: 1.08, duration: 100 }))
+    badge.on('pointerout', () => this.tweens.add({ targets: cog, scale: 1, duration: 100 }))
   }
 
   addStartButton () {

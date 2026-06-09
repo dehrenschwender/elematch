@@ -9,12 +9,16 @@ import { ScoreOverlay } from './scene/ScoreOverlay'
 import { Tutorial2 } from './scene/Tutorial2'
 import { GameOver } from './scene/GameOver'
 import { Preload } from './scene/Preload'
+import { Settings } from './scene/Settings'
 
 export class Game extends Phaser.Game {
   constructor () {
     super({
       type: Phaser.AUTO,
       title: 'ELEMATCH',
+      // Keep the Phaser version banner in dev for debugging, but silence it in the
+      // production console (where it is just noise).
+      banner: !import.meta.env.PROD,
       // Canvas clear colour matches the camera margin fill, so scene transitions
       // (when no scene paints for a frame) never flash black.
       backgroundColor: CANVAS_BG,
@@ -37,7 +41,9 @@ export class Game extends Phaser.Game {
         Tutorial2,
         GameScene,
         ScoreOverlay,
-        GameOver
+        GameOver,
+        // Registered last so the overlay renders above the Menu when launched.
+        Settings
       ]
     })
   }

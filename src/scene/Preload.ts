@@ -27,8 +27,10 @@ import background from '../assets/images/background-with-area.png'
 import gameOverBackground from '../assets/images/background-gameover.png'
 import playAgain from '../assets/images/buttons/button-playagain.png'
 import playAgainActive from '../assets/images/buttons/button-playagain-active.png'
+import appIcon from '../assets/icon.png'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 import { makeResponsive } from '../util/responsive'
+import { initSound } from '../util/sound'
 
 export class Preload extends Phaser.Scene {
   percentageText: Phaser.GameObjects.Text | null;
@@ -45,6 +47,8 @@ export class Preload extends Phaser.Scene {
   preload () {
     // Standalone loading screen: fit the camera now (no create() hook here).
     makeResponsive(this, { fillBackground: true })
+    // Apply the persisted mute preference and arm the Web Audio unlock-on-gesture.
+    initSound(this.game)
     this.load.on('progress', this.updatePercentageText.bind(this))
     // this.load.on('fileprogress', (fileprogress) => {
     //   console.log('fileprogress is', fileprogress)
@@ -55,6 +59,7 @@ export class Preload extends Phaser.Scene {
 
     this.createText()
     this.preloadBackground()
+    this.preloadIcon()
     this.preloadMenuImages()
     this.preloadTutorialImages()
     this.preloadTutorial2Images()
@@ -84,6 +89,11 @@ export class Preload extends Phaser.Scene {
 
   preloadBackground () {
     this.load.image('background', background)
+  }
+
+  preloadIcon () {
+    // App icon, shown on the Settings → About panel.
+    this.load.image('appIcon', appIcon)
   }
 
   preloadCardImages () {
