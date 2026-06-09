@@ -4,6 +4,7 @@ import nextButton from '../assets/images/buttons/button-next.png'
 import nextButtonActive from '../assets/images/buttons/button-next-active.png'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 import { TwoStateButton } from '../Buttons/TwoStateButton'
+import { makeResponsive } from '../util/responsive'
 
 export class Tutorial extends BaseScene {
   constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
@@ -14,6 +15,7 @@ export class Tutorial extends BaseScene {
   }
 
   create () {
+    makeResponsive(this, { fillBackground: true })
     this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 'tutorial1Image')
     this.addNextButton()
   }

@@ -13,6 +13,7 @@ import { LifeBar } from '../util/entity/LifeBar'
 import { SCREEN_HEIGHT } from '../constants/game'
 import coin from '../assets/images/coin/coin01.png'
 import type { GameState } from '../util/GameState'
+import { makeResponsive } from '../util/responsive'
 
 const FONT_SIZE = 60
 const TEXT_COLOR = '#000'
@@ -63,6 +64,8 @@ export class ScoreOverlay extends BaseScene {
   }
 
   create () {
+    // Overlay scene: keep the camera transparent so the Background shows through.
+    makeResponsive(this)
     this.add.image(470, BUTTON.Y, 'scoreField')
     this.add.image(680, BUTTON.Y, 'timerField')
     this.createTimerText()

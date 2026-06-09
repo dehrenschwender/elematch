@@ -39,6 +39,12 @@ export class CardImage extends Phaser.GameObjects.Image {
   }
 
   onClickDown(card: { id: number; data: CardData }) {
+    // A card destroyed on redeal can still receive a buffered pointer event; once
+    // destroyed, this.scene is null, so ignore the stale click rather than crash on
+    // `this.scene.scene` ("can't access property cameras/scene, this.scene is undefined").
+    if (!this.scene) {
+      return
+    }
     const gameScene = this.scene.scene.get("Game")
     gameScene.data.get("gameState").toggleCard(card);
     gameScene.events.emit("changedata", gameScene.data.get("gameState"));

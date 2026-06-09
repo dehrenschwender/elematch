@@ -1,9 +1,18 @@
 # pnpm 11 reads build-script approvals here (out of package.json's "pnpm" field).
 # These packages run install scripts to set up their native binaries:
+#   @sentry/cli -> fetches the binary @sentry/vite-plugin uses to upload source maps
 #   esbuild -> Vite's bundler/transform engine
 #   workerd -> Cloudflare Workers runtime used by wrangler dev/deploy
 #   sharp   -> image processing used by wrangler
 allowBuilds:
+  '@sentry/cli': true
   esbuild: true
   sharp: true
   workerd: true
+minimumReleaseAgeExclude:
+  - '@sentry-internal/browser-utils@10.57.0'
+  - '@sentry-internal/feedback@10.57.0'
+  - '@sentry-internal/replay-canvas@10.57.0'
+  - '@sentry-internal/replay@10.57.0'
+  - '@sentry/browser@10.57.0'
+  - '@sentry/core@10.57.0'

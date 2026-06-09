@@ -26,7 +26,17 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # When the Sentry secrets/vars are set the build uploads source maps (then
+      # strips the .map files from dist); when they are absent the build still
+      # succeeds with the plugin omitted. The tag (e.g. v1.2.3) is the release id.
       - run: pnpm build
+        env:
+          VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          VITE_SENTRY_RELEASE: ${{ github.ref_name }}
+          SENTRY_RELEASE: ${{ github.ref_name }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
 
       - name: Deploy og-elemat-ch (og.elemat.ch)
         run: pnpm exec wrangler deploy --config wrangler.og.jsonc
