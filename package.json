@@ -16,7 +16,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "pnpm build && wrangler deploy"
+    "deploy": "pnpm build && wrangler deploy",
+    "release:sync-notes": "node scripts/sync-release-notes.mjs",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -27,6 +29,9 @@
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
   "homepage": "https://elemat.ch",
   "devDependencies": {
+    "@commitlint/cli": "21.0.2",
+    "@commitlint/config-angular": "21.0.2",
+    "husky": "9.1.7",
     "typescript": "^6.0.3",
     "vite": "8.0.16",
     "vitest": "4.1.8",
