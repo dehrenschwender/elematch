@@ -4,6 +4,8 @@ Get points by finding card sets.
 
 [Play Now](https://elemat.ch)
 
+[Play the OG version](https://og.elemat.ch)
+
 ## Screenshots
 
 - <img src="./screenshots/elematch_tutorial.png" alt="tutorial">
