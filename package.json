@@ -16,6 +16,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "icon": "node scripts/generate-icon.mjs",
     "deploy": "pnpm build && wrangler deploy",
     "release:sync-notes": "node scripts/sync-release-notes.mjs",
     "prepare": "husky"

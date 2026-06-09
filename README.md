@@ -1,6 +1,10 @@
-# elematch
+<p align="center">
+  <img src="./public/icon-192.png" alt="ELEMATCH icon" width="128" height="128">
+</p>
 
-Get points by finding card sets.
+<h1 align="center">elematch</h1>
+
+<p align="center">Get points by finding card sets.</p>
 
 [Play Now](https://elemat.ch)
 
@@ -15,7 +19,7 @@ Get points by finding card sets.
 
 - [TypeScript](https://www.typescriptlang.org/) for the game source and tests.
 - [Vite](https://vite.dev/) for bundling and the dev server.
-- [Phaser 3](https://phaser.io/) game framework.
+- [Phaser 4](https://phaser.io/) game framework.
 - [pnpm](https://pnpm.io/) as the package manager (enable with `corepack enable`).
 - [Vitest](https://vitest.dev/) for unit tests.
 - Node.js 24 LTS (see `.nvmrc`).
