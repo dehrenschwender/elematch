@@ -12,6 +12,7 @@ import { TwoStateButton } from '../Buttons/TwoStateButton'
 import { LifeBar } from '../util/entity/LifeBar'
 import { SCREEN_HEIGHT } from '../constants/game'
 import coin from '../assets/images/coin/coin01.png'
+import type { GameState } from '../util/GameState'
 
 const FONT_SIZE = 60
 const TEXT_COLOR = '#000'
@@ -34,7 +35,14 @@ const BUTTON = {
 }
 
 export class ScoreOverlay extends BaseScene {
-  constructor (props) {
+  timeRemaining: number;
+  timerText: Phaser.GameObjects.Text | null;
+  score: number;
+  scoreText: Phaser.GameObjects.Text | null;
+  lifeBar: LifeBar | null;
+  lifes?: number;
+
+  constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'ScoreOverlay',
       ...props
@@ -46,7 +54,7 @@ export class ScoreOverlay extends BaseScene {
     this.lifeBar = null
   }
 
-  init ({ time }) {
+  init ({ time }: { time?: number }) {
     if (typeof time === 'undefined') {
       time = 999
     }
@@ -126,7 +134,7 @@ export class ScoreOverlay extends BaseScene {
     this.scene.get('Game').data.get('gameState').onTimeChange(this.updateWithGameState.bind(this))
   }
 
-  updateWithGameState (gameState) {
+  updateWithGameState (gameState: GameState) {
     if (gameState.time !== this.timeRemaining) {
       this.timeRemaining = gameState.time
       this.setTimerText(this.timeRemaining)
@@ -141,17 +149,14 @@ export class ScoreOverlay extends BaseScene {
     }
   }
 
-  setTimerText (time) {
+  setTimerText (time: number) {
     if (this.timerText !== null) {
       const paddedString = time.toString().padStart(3, '0')
       this.timerText.setText(paddedString)
     }
   }
 
-  /**
-   * @param score {number}
-   */
-  setScoreText (score) {
+  setScoreText (score: number) {
     if (this.scoreText !== null) {
       let scoreString = score.toString()
       if (score >= 0) {
@@ -167,7 +172,7 @@ export class ScoreOverlay extends BaseScene {
     this.lifeBar = lifeBar
   }
 
-  updateLifeBar (lifes) {
+  updateLifeBar (lifes: number) {
     if (this.lifeBar !== null) {
       this.lifeBar.setLifes(lifes)
     }

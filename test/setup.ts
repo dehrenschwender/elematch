@@ -3,10 +3,10 @@
 // pure logic touches is Phaser.Utils.Array.Shuffle, so we stub it deterministically
 // (identity shuffle) to keep set-detection tests reproducible without pulling in the
 // full WebGL/canvas engine under Node.
-globalThis.Phaser = {
+;(globalThis as { Phaser?: unknown }).Phaser = {
   Utils: {
     Array: {
-      Shuffle: (array) => array
+      Shuffle: <T>(array: T[]): T[] => array
     }
   }
 };

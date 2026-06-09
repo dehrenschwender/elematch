@@ -1,0 +1,80 @@
+name: Release
+
+# Automated versioning + release on every push to master, driven by Conventional
+# Commits.
+#
+# semantic-release derives the next SemVer from the commits since the last
+# vX.Y.Z tag, writes package.json + CHANGELOG.md, commits them back to master,
+# tags the release, and creates the GitHub Release.
+#
+# The vX.Y.Z tag it creates triggers .github/workflows/deploy-og.yml, which
+# deploys og.elemat.ch with the new version.
+#
+# The bump commit is authored with GITHUB_TOKEN, so it does NOT retrigger this
+# workflow (no release loop). It is marked "[skip actions]" -- a GitHub-only
+# skip token -- so the GitHub Actions side also skips it (belt-and-suspenders
+# for the PAT/App-token push case). It deliberately avoids "[skip ci]" so that a
+# Cloudflare Workers Build connected to this repo still rebuilds from the bumped
+# commit rather than leaving the deployed version one release behind.
+
+on:
+  push:
+    branches: [master]
+
+# Least privilege by default; the job elevates only what it needs.
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # push the version bump, create the tag + GitHub Release
+      issues: write          # comment on released issues
+      pull-requests: write   # comment on released pull requests
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # full history + tags so commit-analyzer sees commits since the last tag
+          persist-credentials: true
+
+      # pnpm/action-setup must come before setup-node so the pnpm cache works.
+      # No version is pinned here; it is read from package.json's packageManager
+      # field, matching deploy-og.yml.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # The release's @semantic-release/exec prepare step runs `pnpm run build`
+      # (tsc --noEmit && vite build) after the version bump, so a broken build
+      # aborts the release before anything is tagged or pushed. That build needs
+      # the project toolchain, so install devDependencies here.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Run semantic-release + plugins via `pnpm dlx`: it fetches the pinned
+      # versions into an isolated temp store and runs them, leaving package.json
+      # and pnpm-lock.yaml untouched (nothing committed beyond the release bump).
+      # commit-analyzer, release-notes-generator, npm and github ship with the
+      # semantic-release core, so only the extra plugins are listed here.
+      - name: Run semantic-release
+        run: >-
+          pnpm dlx
+          --package semantic-release@25.0.3
+          --package @semantic-release/changelog@6.0.3
+          --package @semantic-release/git@10.0.1
+          --package @semantic-release/exec@7.1.0
+          semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

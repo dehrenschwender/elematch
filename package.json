@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Get points by finding card sets.",
   "type": "module",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "packageManager": "pnpm@11.5.2",
   "engines": {
     "node": ">=24"
@@ -11,11 +11,14 @@
   "scripts": {
     "dev": "vite",
     "start": "vite",
-    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "deploy": "vite build && wrangler deploy"
+    "deploy": "pnpm build && wrangler deploy",
+    "release:sync-notes": "node scripts/sync-release-notes.mjs",
+    "prepare": "husky"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,10 @@
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
   "homepage": "https://elemat.ch",
   "devDependencies": {
+    "@commitlint/cli": "21.0.2",
+    "@commitlint/config-angular": "21.0.2",
+    "husky": "9.1.7",
+    "typescript": "^6.0.3",
     "vite": "8.0.16",
     "vitest": "4.1.8",
     "wrangler": "4.98.0"

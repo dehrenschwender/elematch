@@ -30,7 +30,9 @@ import playAgainActive from '../assets/images/buttons/button-playagain-active.pn
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 
 export class Preload extends Phaser.Scene {
-  constructor (props) {
+  percentageText: Phaser.GameObjects.Text | null;
+
+  constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
     super(props)
     this.percentageText = null
   }
@@ -67,9 +69,11 @@ export class Preload extends Phaser.Scene {
         font: `100px DisposableDroid`,
         color: '#ffffff',
         align: 'center',
+        // boundsAlignV is a valid runtime text-style key but is missing from Phaser's
+        // TextStyle typings, so the literal is asserted to the style type.
         boundsAlignV: 'center',
         fixedWidth: SCREEN_WIDTH,
-      }
+      } as Phaser.Types.GameObjects.Text.TextStyle
     )
     text.setDepth(100)
     this.percentageText = text
@@ -83,13 +87,13 @@ export class Preload extends Phaser.Scene {
     // Vite's import.meta.glob replaces webpack's require.context. Eagerly importing
     // each card image as a URL yields a { path: url } map; the Phaser texture key is
     // the file name without its extension (e.g. "fire-red-1-full").
-    const cardModules = import.meta.glob(
+    const cardModules = import.meta.glob<string>(
       '../assets/images/cards/*.{png,jpg,jpeg,svg}',
       { eager: true, query: '?url', import: 'default' }
     )
 
     Object.entries(cardModules).forEach(([imagePath, url]) => {
-      const fileName = imagePath.split('/').pop()
+      const fileName = imagePath.split('/').pop()!
       const key = fileName.replace(/\.\w+$/, '')
       this.load.image(key, url)
     })
@@ -145,7 +149,7 @@ export class Preload extends Phaser.Scene {
     this.load.image('playAgainActive', playAgainActive)
   }
 
-  updatePercentageText (progress) {
+  updatePercentageText (progress: number) {
     if (this.percentageText === null) {
       return
     }

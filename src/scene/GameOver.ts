@@ -9,7 +9,9 @@ const FONT_SIZE = 80
 const TEXT_COLOR = '#FFFFFF'
 
 export class GameOver extends BaseScene {
-  constructor (config) {
+  score: number;
+
+  constructor (config?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'GameOver',
       ...config
@@ -17,7 +19,7 @@ export class GameOver extends BaseScene {
     this.score = 0
   }
 
-  init ({ finalScore }) {
+  init ({ finalScore }: { finalScore: number }) {
     this.score = finalScore
   }
 

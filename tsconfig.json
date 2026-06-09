@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+
+    // Vite/Vitest transpile with esbuild, which strips types but does not type-check;
+    // `pnpm typecheck` (tsc --noEmit) is the source of truth, so we never emit here.
+    "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Preserve the runtime semantics of the original JS classes: a bare field
+    // declaration is type-only (erased) and an initialiser becomes a constructor
+    // assignment, instead of `define`-ing the property over an inherited Phaser accessor.
+    "useDefineForClassFields": false,
+
+    "strict": true,
+    // Phaser scenes populate their fields in the create()/init() lifecycle hooks
+    // rather than the constructor, so definite-assignment checking is not meaningful here.
+    "strictPropertyInitialization": false
+  },
+  "include": ["src", "test", "vite.config.ts"]
+}

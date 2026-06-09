@@ -6,7 +6,7 @@ import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 import { TwoStateButton } from '../Buttons/TwoStateButton'
 
 export class Tutorial extends BaseScene {
-  constructor (props) {
+  constructor (props?: Phaser.Types.Scenes.SettingsConfig) {
     super({
       key: 'Tutorial',
       ...props

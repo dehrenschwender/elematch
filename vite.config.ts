@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   build: {
@@ -9,7 +9,7 @@ export default defineConfig({
   // Vitest configuration (shares this Vite config).
   test: {
     environment: 'node',
-    include: ['test/**/*.test.js'],
-    setupFiles: ['./test/setup.js'],
+    include: ['test/**/*.test.ts'],
+    setupFiles: ['./test/setup.ts'],
   },
 })

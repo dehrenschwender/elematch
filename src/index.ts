@@ -4,4 +4,4 @@ import './phaser-global'
 import './assets/css/style.css'
 import { Game } from './Game'
 
-const game = new Game()
+new Game()
