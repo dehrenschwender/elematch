@@ -1,0 +1,19 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "og-elemat-ch",
+  "compatibility_date": "2026-06-09",
+  // Static-assets-only Worker serving the same Vite build output (./dist) as
+  // elemat-ch, but published to the og.elemat.ch custom domain and deployed only
+  // from git tags (see .github/workflows/deploy-og.yml).
+  //
+  // custom_domain: true makes Cloudflare create/manage the DNS record for
+  // og.elemat.ch automatically — that hostname must not already have a conflicting
+  // DNS record, and elemat.ch must be a zone on the same Cloudflare account.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    { "pattern": "og.elemat.ch", "custom_domain": true }
+  ]
+}

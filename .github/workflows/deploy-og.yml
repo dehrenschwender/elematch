@@ -1,0 +1,35 @@
+name: Deploy og.elemat.ch
+
+# Deploys the tagged commit to the `og-elemat-ch` Worker (og.elemat.ch).
+# The main elemat.ch Worker is deployed separately and is untouched by this.
+# Requires repo secrets: CLOUDFLARE_API_TOKEN (Workers Scripts: Edit) and
+# CLOUDFLARE_ACCOUNT_ID.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm/action-setup must come before setup-node so the pnpm cache works.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Deploy og-elemat-ch (og.elemat.ch)
+        run: pnpm exec wrangler deploy --config wrangler.og.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
