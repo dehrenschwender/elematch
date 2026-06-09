@@ -3,6 +3,7 @@ import { CardStack } from '../util/CardStack'
 import { CardImage } from '../util/entity/CardImage'
 import { getTextureNameForCard } from '../util/entity/Card'
 import type { GameState } from '../util/GameState'
+import { makeResponsive } from '../util/responsive'
 
 import select1Sound from '../assets/sounds/select-1.wav'
 import select2Sound from '../assets/sounds/select-2.wav'
@@ -21,7 +22,17 @@ export class CardGrid extends BaseScene {
   }
 
   placeDeck () {
-    this.children.removeAll();
+    // Tear down the previous deck before dealing a new one. Each card is made
+    // interactive (setInteractive in CardImage), which registers it with the scene's
+    // InputPlugin — a list separate from the display list. children.removeAll(true) /
+    // destroy() alone do NOT unregister it under Phaser 4, so the now-invisible old
+    // cards keep their hit areas and steal clicks at their old positions (the game then
+    // evaluates stale cards on every deck after the first). Disabling input explicitly,
+    // then destroying, clears both lists.
+    this.children.getAll().forEach((child) => {
+      this.input.disable(child)
+      child.destroy()
+    })
     let deck = this.cardstack.getDeck();
 
     //card 130 x 170
@@ -77,6 +88,8 @@ export class CardGrid extends BaseScene {
   }
 
   create () {
+    // Overlay scene: keep the camera transparent so the Background shows through.
+    makeResponsive(this)
     this.placeDeck()
     this.subscribeToStateChange()
   }

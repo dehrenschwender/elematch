@@ -28,6 +28,7 @@ import gameOverBackground from '../assets/images/background-gameover.png'
 import playAgain from '../assets/images/buttons/button-playagain.png'
 import playAgainActive from '../assets/images/buttons/button-playagain-active.png'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
+import { makeResponsive } from '../util/responsive'
 
 export class Preload extends Phaser.Scene {
   percentageText: Phaser.GameObjects.Text | null;
@@ -42,6 +43,8 @@ export class Preload extends Phaser.Scene {
   }
 
   preload () {
+    // Standalone loading screen: fit the camera now (no create() hook here).
+    makeResponsive(this, { fillBackground: true })
     this.load.on('progress', this.updatePercentageText.bind(this))
     // this.load.on('fileprogress', (fileprogress) => {
     //   console.log('fileprogress is', fileprogress)

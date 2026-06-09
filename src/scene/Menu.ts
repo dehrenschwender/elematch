@@ -6,6 +6,7 @@ import buttonNewgameActive from '../assets/images/buttons/button-newgame-active.
 import buttonTutorial from '../assets/images/buttons/button-tutorial.png'
 import buttonTutorialActive from '../assets/images/buttons/button-tutorial-active.png'
 import startBackground from '../assets/images/start.png'
+import { makeResponsive } from '../util/responsive'
 
 export class Menu extends BaseScene {
   constructor (config?: Phaser.Types.Scenes.SettingsConfig) {
@@ -20,6 +21,7 @@ export class Menu extends BaseScene {
   }
 
   create () {
+    makeResponsive(this, { fillBackground: true })
     this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 'startBackground')
     this.createInvisibleFontLoaderText()
     this.addStartButton()

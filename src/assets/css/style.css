@@ -1,3 +1,24 @@
+/* Full-bleed canvas: the game uses Phaser.Scale.RESIZE, so the canvas tracks the
+   size of its parent container, which we stretch to the whole viewport. The dark
+   background matches the margins the camera paints around the centred design. */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #070b1a;
+    overflow: hidden;
+}
+
+#elematch-game-cointainer {
+    width: 100vw;
+    height: 100vh;
+}
+
+#elematch-game-cointainer canvas {
+    display: block;
+}
+
 @font-face {
     font-family: "DisposableDroid";
     src: url('../fonts/disposabledroid-bb/DisposableDroidBB.ttf') format('truetype');

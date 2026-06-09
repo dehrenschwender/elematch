@@ -17,3 +17,8 @@ dist/
 # Cloudflare Wrangler
 .wrangler/
 .dev.vars
+
+# Local environment / secrets (Sentry DSN, auth token, etc.) — keep .env.example
+.env
+.env.*
+!.env.example

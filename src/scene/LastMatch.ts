@@ -4,6 +4,7 @@ import { getSetDifficulty } from '../util/CardStack'
 import { DIFFICULTY_SCORE_MULTIPLIER } from '../util/GameState'
 import type { GameState, SelectedCard } from '../util/GameState'
 import { TEXT_Y } from './ScoreOverlay'
+import { makeResponsive } from '../util/responsive'
 
 const X_VALUES = [130, 310, 490]
 const X_COORD = 1135
@@ -22,6 +23,8 @@ export class LastMatch extends BaseScene {
   }
 
   create () {
+    // Overlay scene: keep the camera transparent so the Background shows through.
+    makeResponsive(this)
     this.subscribeToGameStateChange()
   }
 

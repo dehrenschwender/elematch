@@ -4,6 +4,7 @@ import playAgain from '../assets/images/buttons/button-playagain.png'
 import playAgainActive from '../assets/images/buttons/button-playagain-active.png'
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants/game'
 import { TwoStateButton } from '../Buttons/TwoStateButton'
+import { makeResponsive } from '../util/responsive'
 
 const FONT_SIZE = 80
 const TEXT_COLOR = '#FFFFFF'
@@ -24,6 +25,7 @@ export class GameOver extends BaseScene {
   }
 
   create () {
+    makeResponsive(this, { fillBackground: true })
     this.add.image(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 'gameOverBackground')
     this.createPlayAgainButton()
     this.createHighscoreText()
