@@ -80,20 +80,19 @@ export class Preload extends Phaser.Scene {
   }
 
   preloadCardImages () {
-    const importAll = (require) => {
-      const imagePaths = require.keys()
-      const images = require.keys().map(require)
+    // Vite's import.meta.glob replaces webpack's require.context. Eagerly importing
+    // each card image as a URL yields a { path: url } map; the Phaser texture key is
+    // the file name without its extension (e.g. "fire-red-1-full").
+    const cardModules = import.meta.glob(
+      '../assets/images/cards/*.{png,jpg,jpeg,svg}',
+      { eager: true, query: '?url', import: 'default' }
+    )
 
-      const phaserImageKeys = imagePaths.map((imagePath) => {
-        const fileName = imagePath.substr(2)
-        return fileName.substring(0, fileName.length - 4)
-      });
-      for (let i = 0; i < images.length; i++) {
-        this.load.image(phaserImageKeys[i], images[i])
-      }
-    };
-    importAll(require.context('../assets/images/cards', false, /\.(png|jpe?g|svg)$/))
-
+    Object.entries(cardModules).forEach(([imagePath, url]) => {
+      const fileName = imagePath.split('/').pop()
+      const key = fileName.replace(/\.\w+$/, '')
+      this.load.image(key, url)
+    })
   }
 
   preloadAudio () {

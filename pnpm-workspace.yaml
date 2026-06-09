@@ -1,0 +1,9 @@
+# pnpm 11 reads build-script approvals here (out of package.json's "pnpm" field).
+# These packages run install scripts to set up their native binaries:
+#   esbuild -> Vite's bundler/transform engine
+#   workerd -> Cloudflare Workers runtime used by wrangler dev/deploy
+#   sharp   -> image processing used by wrangler
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "elemat-ch",
+  "compatibility_date": "2026-06-09",
+  // Static-assets-only Worker: no `main` script, just the Vite build output in ./dist.
+  // Run `pnpm build` (vite build) first, then `wrangler deploy` (or `pnpm deploy`).
+  "assets": {
+    "directory": "./dist",
+    // Serve index.html for any unmatched path (the game is a single-page app).
+    "not_found_handling": "single-page-application"
+  }
+}

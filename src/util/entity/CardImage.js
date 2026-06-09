@@ -37,37 +37,16 @@ export class CardImage extends Phaser.GameObjects.Image {
   }
 
   noMatchAnimation() {
-    let timeline = this.scene.tweens.createTimeline();
-
-    timeline.add({
+    // Phaser removed TweenManager.createTimeline() in 3.60; tweens.chain() is the
+    // replacement for running a sequence of tweens. It auto-plays (no .play() needed).
+    this.scene.tweens.chain({
       targets: this,
-      angle: 4,
-      duration: 40,
-      ease: 'Power2',
-      yoyo: true,
-    })
-    timeline.add({
-      targets: this,
-      angle: -4,
-      duration: 40,
-      ease: 'Power2',
-      yoyo: true,
-    })
-    timeline.add({
-      targets: this,
-      angle: 4,
-      duration: 40,
-      ease: 'Power2',
-      yoyo: true,
-    })
-    timeline.add({
-      targets: this,
-      angle: -4,
-      duration: 40,
-      ease: 'Power2',
-      yoyo: true,
-    })
-
-    timeline.play();
+      tweens: [
+        { angle: 4, duration: 40, ease: 'Power2', yoyo: true },
+        { angle: -4, duration: 40, ease: 'Power2', yoyo: true },
+        { angle: 4, duration: 40, ease: 'Power2', yoyo: true },
+        { angle: -4, duration: 40, ease: 'Power2', yoyo: true },
+      ],
+    });
   }
 }
